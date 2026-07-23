@@ -61,3 +61,15 @@ jobs:
           DB_DATABASE: luxury_watch_test
           DB_USERNAME: root
           DB_PASSWORD: root
+
+      - name: Package application (Continuous Delivery)
+        run: |
+          zip -r luxury-watch-release-${{ github.sha }}.zip . \
+            -x "vendor/*" -x "node_modules/*" -x ".git/*" -x "tests/*"
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: luxury-watch-release
+          path: luxury-watch-release-${{ github.sha }}.zip
+          retention-days: 7
